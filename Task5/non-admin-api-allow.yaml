@@ -1,0 +1,72 @@
+# =============================================================================
+# Пользовательский контур: front-end <-> back-end-api.
+#
+# Трафик разрешён в обе стороны и только внутри пары. Обращения к
+# административному контуру не разрешены ни одним правилом, а значит
+# запрещены базовой политикой default-deny-all.
+#
+# Правила симметричны: на стороне получателя открывается Ingress,
+# на стороне инициатора — Egress. Обе половины обязательны, потому что
+# default-deny-all закрывает оба направления.
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: front-end-allow
+  namespace: traffic-demo
+  annotations:
+    description: "front-end принимает трафик от back-end-api и обращается к нему"
+spec:
+  podSelector:
+    matchLabels:
+      role: front-end
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: back-end-api
+      ports:
+        - protocol: TCP
+          port: 80
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              role: back-end-api
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: back-end-api-allow
+  namespace: traffic-demo
+  annotations:
+    description: "back-end-api принимает трафик только от front-end и отвечает ему"
+spec:
+  podSelector:
+    matchLabels:
+      role: back-end-api
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: front-end
+      ports:
+        - protocol: TCP
+          port: 80
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              role: front-end
+      ports:
+        - protocol: TCP
+          port: 80
