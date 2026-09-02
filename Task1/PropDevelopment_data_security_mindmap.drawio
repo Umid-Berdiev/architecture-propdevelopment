@@ -4,8 +4,8 @@
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="n2" value="&lt;b&gt;БЕЗОПАСНОСТЬ&lt;br&gt;ДАННЫХ&lt;/b&gt;&lt;br&gt;PropDevelopment" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontSize=14;align=center;verticalAlign=middle;shadow=1;fillColor=#FF9964;strokeColor=#FF1F3D;fontColor=#FFFFFF;" vertex="1" parent="1">
-          <mxGeometry x="-115" y="980" width="230" height="96" as="geometry"/>
+        <mxCell id="n2" value="&lt;b&gt;БЕЗОПАСНОСТЬ&lt;br&gt;ДАННЫХ&lt;/b&gt;&lt;br&gt;PropDevelopment" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontSize=14;align=center;verticalAlign=middle;shadow=1;fillColor=#FF3864;strokeColor=#0F1F3D;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="-115" y="987" width="230" height="96" as="geometry"/>
         </mxCell>
         <mxCell id="n3" value="&lt;b&gt;КОНФИДЕНЦИАЛЬНЫЕ ДАННЫЕ&lt;/b&gt;&lt;br&gt;Confidential / ПДн, 152-ФЗ" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=12;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFE6CC;strokeColor=#D79B00;fontColor=#5C3A00;" vertex="1" parent="1">
           <mxGeometry x="210" y="474" width="250" height="74" as="geometry"/>
@@ -31,7 +31,7 @@
         <mxCell id="n10" value="Телеметрия «Умного дома»: статус замка квартиры, сценарии автоматики — данные о присутствии человека в жилище" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="900" y="306" width="400" height="52" as="geometry"/>
         </mxCell>
-        <mxCell id="n11" value="Бухгалтерские и финансовые данные (accountant-service-1, auth-db-1 домена «Финансы»)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
+        <mxCell id="n11" value="Бухгалтерские и финансовые данные (accountant-service-1 и его база данных)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="900" y="370" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n12" value="&lt;b&gt;Утечка данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
@@ -65,7 +65,7 @@
           <mxGeometry x="900" y="942" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n22" value="&lt;b&gt;СЕКРЕТНЫЕ ДАННЫЕ&lt;/b&gt;&lt;br&gt;Restricted / секреты и доступы" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=12;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#5C1A18;" vertex="1" parent="1">
-          <mxGeometry x="210" y="1547" width="250" height="74" as="geometry"/>
+          <mxGeometry x="210" y="1554" width="250" height="74" as="geometry"/>
         </mxCell>
         <mxCell id="n23" value="&lt;b&gt;Данные компании&lt;br&gt;этой категории&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="545" y="1278" width="285" height="39" as="geometry"/>
@@ -89,142 +89,142 @@
           <mxGeometry x="900" y="1432" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n30" value="&lt;b&gt;Утечка данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1537" width="285" height="54" as="geometry"/>
+          <mxGeometry x="545" y="1544" width="285" height="54" as="geometry"/>
         </mxCell>
-        <mxCell id="n31" value="Компрометация одного секрета открывает доступ сразу ко всем остальным категориям данных: через Keycloak и Active Directory — к CRM и хранилищу, через ключи СМЭВ — к государственным сервисам. Поверхность увеличена двумя независимыми контурами аутентификации и отсутствием единых политик по партнёрским API, а единственный специалист по ИБ не получает информации об изменениях в командах." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="900" y="1510" width="400" height="108" as="geometry"/>
+        <mxCell id="n31" value="Компрометация одного секрета открывает доступ сразу ко всем остальным категориям данных: через Keycloak и Active Directory — к CRM и хранилищу, через ключи СМЭВ — к государственным сервисам. Поверхность увеличена раздельными механизмами аутентификации для внешних пользователей (Keycloak) и сотрудников (Active Directory), а также отсутствием единых политик по партнёрским API, а единственный специалист по ИБ не получает информации об изменениях в командах." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="900" y="1510" width="400" height="122" as="geometry"/>
         </mxCell>
         <mxCell id="n32" value="&lt;b&gt;Потеря данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1657" width="285" height="54" as="geometry"/>
+          <mxGeometry x="545" y="1671" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n33" value="Утрата ключей СМЭВ и средств подписи делает невозможным проведение онлайн-сделок — останавливается основной бизнес-процесс. Утрата ключей шифрования резервных копий превращает существующие бэкапы в нечитаемые, то есть обесценивает всю схему восстановления данных компании." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="900" y="1644" width="400" height="80" as="geometry"/>
+          <mxGeometry x="900" y="1658" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n34" value="&lt;b&gt;Искажение данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1770" width="285" height="54" as="geometry"/>
+          <mxGeometry x="545" y="1784" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n35" value="Подмена конфигурации доверия — realm и клиентов Keycloak, групп и прав в Active Directory, доверенных сертификатов партнёров — даёт нарушителю формально легитимный доступ, который не отличим от штатного. Именно такой класс дефектов правдоподобно объясняет доступ партнёра к чужим данным и показ чужого профиля в личном кабинете." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="900" y="1750" width="400" height="94" as="geometry"/>
+          <mxGeometry x="900" y="1764" width="400" height="94" as="geometry"/>
         </mxCell>
         <mxCell id="n36" value="&lt;b&gt;Некачественные данные&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1890" width="285" height="54" as="geometry"/>
+          <mxGeometry x="545" y="1904" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n37" value="Секреты не ротируются и переиспользуются между контурами: для доработки и тестирования команды поднимают облачные ресурсы, куда попадают рабочие учётные данные. После смены руководителей IT-команд права в Active Directory не пересмотрены — модель доступа в системе не соответствует фактической." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="900" y="1870" width="400" height="94" as="geometry"/>
+          <mxGeometry x="900" y="1884" width="400" height="94" as="geometry"/>
         </mxCell>
         <mxCell id="n38" value="&lt;b&gt;Обесценивание данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: НЕЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#E8F5E9;strokeColor=#4CAF50;fontColor=#1B5E20;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1996" width="285" height="54" as="geometry"/>
+          <mxGeometry x="545" y="2010" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n39" value="Секреты не являются аналитическим активом и не теряют ценность со временем: устаревший ключ просто отзывается и выпускается заново. Затраты ограничены плановой ротацией и не влияют на бизнес-результат." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="900" y="1990" width="400" height="66" as="geometry"/>
+          <mxGeometry x="900" y="2004" width="400" height="66" as="geometry"/>
         </mxCell>
         <mxCell id="n40" value="&lt;b&gt;ПУБЛИЧНЫЕ ДАННЫЕ&lt;/b&gt;&lt;br&gt;Public / открытая публикация" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=12;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1B3A17;" vertex="1" parent="1">
-          <mxGeometry x="-460" y="495" width="250" height="74" as="geometry"/>
+          <mxGeometry x="-460" y="502" width="250" height="74" as="geometry"/>
         </mxCell>
         <mxCell id="n41" value="&lt;b&gt;Данные компании&lt;br&gt;этой категории&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="262" width="285" height="39" as="geometry"/>
+          <mxGeometry x="-830" y="268" width="285" height="39" as="geometry"/>
         </mxCell>
         <mxCell id="n42" value="Каталог объектов недвижимости: планировки, цены, статус «свободно / забронировано» (client-mart-estate-app → витрина продаж, публикация через Kafka)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="95" width="400" height="66" as="geometry"/>
+          <mxGeometry x="-1300" y="102" width="400" height="66" as="geometry"/>
         </mxCell>
         <mxCell id="n43" value="Публичные 3D-туры и медиаконтент объектов (client-tour-app, client-tour-db)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="173" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="180" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n44" value="Маркетинговый контент витрины продаж и витрины сервисов для собственников" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="237" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="244" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n45" value="Публичные объявления и новости управляющей компании для жильцов (tenant-core-app)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="301" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="308" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n46" value="Публичные тарифы и справочники ЖКУ, полученные от поставщиков ресурсов ЖКХ" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="365" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="372" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n47" value="Публичная (документированная) часть API-контрактов для партнёров" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="429" width="400" height="38" as="geometry"/>
+          <mxGeometry x="-1300" y="436" width="400" height="38" as="geometry"/>
         </mxCell>
         <mxCell id="n48" value="&lt;b&gt;Утечка данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: НЕЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#E8F5E9;strokeColor=#4CAF50;fontColor=#1B5E20;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="499" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="506" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n49" value="Данные создаются для публикации в открытом доступе, режим конфиденциальности к ним не применяется. Раскрытие не даёт нарушителю ничего сверх того, что уже видно на витрине, ущерба субъектам ПДн нет." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="493" width="400" height="66" as="geometry"/>
+          <mxGeometry x="-1300" y="500" width="400" height="66" as="geometry"/>
         </mxCell>
         <mxCell id="n50" value="&lt;b&gt;Потеря данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="598" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="605" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n51" value="Каталог объектов — вход в воронку продаж: без него не работают витрина, онлайн-тур и бронирование, компания теряет выручку. Риск не критический, так как для всех БД выполняется резервное копирование и данные восстановимы из client-mart-estate-db." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="585" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="592" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n52" value="&lt;b&gt;Искажение данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="704" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="711" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n53" value="Публичные цена, площадь и статус брони фактически являются публичной офертой: подмена значения ведёт к юридическим претензиям и прямым убыткам. Публикация каталога идёт через Kafka без системного контроля потоков и проверки целостности, то есть подмена не будет замечена." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="691" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="698" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n54" value="&lt;b&gt;Некачественные данные&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="810" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="817" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n55" value="У данных об объектах несколько точек ввода и нет единого владельца качества. Устаревший статус «свободно» приводит к двойным бронированиям, отменам сделок и жалобам клиентов — это одна из уже проявившихся проблем удовлетворённости." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="797" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="804" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n56" value="&lt;b&gt;Обесценивание данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: НЕЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#E8F5E9;strokeColor=#4CAF50;fontColor=#1B5E20;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="909" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="916" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n57" value="Публичный контент быстро устаревает, но полностью перегенерируется из client-mart-estate-db и client-tour-db. Самостоятельной ценности как долгосрочный актив не имеет, потери от устаревания минимальны." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="903" width="400" height="66" as="geometry"/>
+          <mxGeometry x="-1300" y="910" width="400" height="66" as="geometry"/>
         </mxCell>
         <mxCell id="n58" value="&lt;b&gt;ВНУТРЕННИЕ ДАННЫЕ&lt;/b&gt;&lt;br&gt;Internal use only" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=12;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#12305C;" vertex="1" parent="1">
-          <mxGeometry x="-460" y="1473" width="250" height="74" as="geometry"/>
+          <mxGeometry x="-460" y="1480" width="250" height="74" as="geometry"/>
         </mxCell>
         <mxCell id="n59" value="&lt;b&gt;Данные компании&lt;br&gt;этой категории&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1212" width="285" height="39" as="geometry"/>
+          <mxGeometry x="-830" y="1218" width="285" height="39" as="geometry"/>
         </mxCell>
         <mxCell id="n60" value="Витрины, агрегаты и сырые CDC-потоки в Хранилище данных (Greenplum) и DWH-хранилище (S3)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1059" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="1066" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n61" value="BI-отчётность и управленческие метрики: воронка бронирований, конверсия, выручка по ЖК" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1123" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="1130" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n62" value="Планы и история текущего и капитального ремонта по жилым комплексам (tenant-core-db)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1187" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="1194" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n63" value="Логи приложений, интеграций и аудит-события всех доменов" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1251" width="400" height="38" as="geometry"/>
+          <mxGeometry x="-1300" y="1258" width="400" height="38" as="geometry"/>
         </mxCell>
         <mxCell id="n64" value="Архитектурная документация: C4-модель, схемы интеграций, внутренние регламенты и процессы" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1301" width="400" height="52" as="geometry"/>
+          <mxGeometry x="-1300" y="1308" width="400" height="52" as="geometry"/>
         </mxCell>
         <mxCell id="n65" value="Служебные справочники, конфигурации и настройки прикладных систем" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1365" width="400" height="38" as="geometry"/>
+          <mxGeometry x="-1300" y="1372" width="400" height="38" as="geometry"/>
         </mxCell>
         <mxCell id="n66" value="&lt;b&gt;Утечка данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1449" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="1456" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n67" value="В хранилище по CDC стекаются сырые данные из всех систем, а ограничений на доступ со стороны систем обработки данных нет — доступ бизнес-аналитика или BI-аналитика фактически неограничен. Оценка не критическая: витрины и отчётность сами по себе не идентифицируют субъекта, ущерб — раскрытие бизнес-модели и экономики продаж." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1429" width="400" height="94" as="geometry"/>
+          <mxGeometry x="-1300" y="1436" width="400" height="94" as="geometry"/>
         </mxCell>
         <mxCell id="n68" value="&lt;b&gt;Потеря данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1562" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="1569" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n69" value="Потеря витрин останавливает отчётность и блокирует запуск BI-, ML- и AI-сервисов, но операционные процессы продаж и ЖКУ продолжают работать, а данные повторно восстанавливаются из систем-источников через CDC и резервные копии." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1549" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="1556" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n70" value="&lt;b&gt;Искажение данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1668" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="1675" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n71" value="На отчётности строятся управленческие решения и планы капитального ремонта. Искажение в CDC-потоке незаметно распространяется на все витрины и BI сразу, а системного контроля внутренних потоков данных между продуктами нет — ошибка обнаруживается только по последствиям." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1655" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="1662" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="n72" value="&lt;b&gt;Некачественные данные&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: КРИТИЧЕСКИЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFEBEE;strokeColor=#D32F2F;fontColor=#8E1616;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1781" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="1788" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n73" value="Несколько несогласованных точек регистрации клиента порождают дубли и рассинхронизацию ключей в хранилище: одна и та же персона существует как разные сущности в client-mart-db, crm-db и crm-tenant-db. Именно это прямо блокирует заявленную цель — развитие сервисов на базе BI, ML и AI." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1761" width="400" height="94" as="geometry"/>
+          <mxGeometry x="-1300" y="1768" width="400" height="94" as="geometry"/>
         </mxCell>
         <mxCell id="n74" value="&lt;b&gt;Обесценивание данных&lt;/b&gt;&lt;br&gt;&lt;i&gt;Оценка: ЗНАЧИТЕЛЬНЫЙ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=11;verticalAlign=middle;align=center;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#7A3E00;" vertex="1" parent="1">
-          <mxGeometry x="-830" y="1894" width="285" height="54" as="geometry"/>
+          <mxGeometry x="-830" y="1901" width="285" height="54" as="geometry"/>
         </mxCell>
         <mxCell id="n75" value="Нет каталога данных, владельцев доменов и политик хранения, поэтому накопленные данные не вводятся в оборот и стареют быстрее, чем компания успевает извлечь из них знания. Актив есть, но он не капитализируется." style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;fontSize=10;verticalAlign=middle;align=left;spacing=6;spacingLeft=8;spacingRight=8;fillColor=#FFFFFF;strokeColor=#B3B3B3;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="-1300" y="1881" width="400" height="80" as="geometry"/>
+          <mxGeometry x="-1300" y="1888" width="400" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="lg0" value="&lt;b&gt;Шкала оценки риска&lt;/b&gt;" style="text;html=1;fontSize=13;align=left;" vertex="1" parent="1"><mxGeometry x="-1760" y="40" width="220" height="26" as="geometry"/></mxCell>
         <mxCell id="lg1" value="Незначительный риск" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#E8F5E9;strokeColor=#4CAF50;fontColor=#1B5E20;" vertex="1" parent="1"><mxGeometry x="-1760" y="70" width="200" height="30" as="geometry"/></mxCell>
