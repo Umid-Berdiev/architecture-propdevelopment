@@ -271,6 +271,16 @@ kind: RoleBinding
 metadata: { name: rbac-probe-grant, namespace: sales }
 roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: secret-reader }
 subjects: [{ kind: Group, name: sre-oncall, apiGroup: rbac.authorization.k8s.io }]'''
+try_apply forbidden security "выдать secret-reader собственной группе" 'apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: rbac-probe-self, namespace: platform }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: secret-reader }
+subjects: [{ kind: Group, name: security, apiGroup: rbac.authorization.k8s.io }]'
+try_apply forbidden security "выдать namespace-developer собственной группе" 'apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: rbac-probe-self2, namespace: platform }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: Role, name: namespace-developer }
+subjects: [{ kind: Group, name: security, apiGroup: rbac.authorization.k8s.io }]'
 try_apply forbidden security "сделать кого-либо cluster-admin" '''apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata: { name: rbac-probe-admin }

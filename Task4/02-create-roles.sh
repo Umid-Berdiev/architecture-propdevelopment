@@ -266,7 +266,57 @@ printf '    %s\n' "cluster-viewer" "cluster-configurator" "cluster-security-admi
 echo
 
 # -----------------------------------------------------------------------------
-# 3. Роль разработчика — своя в каждом продуктовом пространстве имён
+# 3. Запрет выдачи прав самому себе (проверка на приёме)
+# -----------------------------------------------------------------------------
+# Средствами RBAC разделение обязанностей против администратора RBAC не
+# строится: тот, кто вправе создавать привязки, вправе назвать в них свою
+# собственную группу. Проверено на кластере — роль ИБ привязывала себе
+# namespace-developer в platform, создавала под с секретом в переменной
+# окружения и читала значение из журнала. При этом «get secrets» для неё
+# по-прежнему отвечал «нет»: право не появлялось, а секрет утекал.
+#
+# Закрывается это не ролью, а проверкой на приёме: привязка, называющая
+# собственную группу или собственное имя создателя, отклоняется. Выдать право
+# другому по-прежнему можно — нельзя выдать его себе.
+#
+# Проверка неподвластна самой роли ИБ: правка политик допуска входит в
+# cluster-admission-admin, которая группам не выдаётся.
+log "Создаю проверку на приёме: запрет выдачи прав самому себе"
+kubectl apply -f - >/dev/null <<'EOF'
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: no-self-grant
+  annotations:
+    description: "Запрещает создавать привязку прав, в subjects которой указана группа или имя самого создателя"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups:   ["rbac.authorization.k8s.io"]
+        apiVersions: ["v1"]
+        operations:  ["CREATE", "UPDATE"]
+        resources:   ["rolebindings", "clusterrolebindings"]
+  validations:
+    - expression: >-
+        !has(object.subjects) || !object.subjects.exists(s,
+          (s.kind == 'Group' && s.name in request.userInfo.groups) ||
+          (s.kind == 'User'  && s.name == request.userInfo.username))
+      message: "выдача прав самому себе запрещена: привязку, называющую вашу группу или ваше имя, должен создать другой участник"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: no-self-grant
+spec:
+  policyName: no-self-grant
+  validationActions: ["Deny"]
+EOF
+printf '    %s\n' "no-self-grant (ValidatingAdmissionPolicy + Binding)"
+echo
+
+# -----------------------------------------------------------------------------
+# 4. Роль разработчика — своя в каждом продуктовом пространстве имён
 # -----------------------------------------------------------------------------
 log "Создаю роль namespace-developer в каждом пространстве имён"
 for entry in "${NAMESPACES[@]}"; do
