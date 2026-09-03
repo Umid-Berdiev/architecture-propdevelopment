@@ -1,0 +1,56 @@
+# =============================================================================
+# Базовый запрет: без него остальные политики бессмысленны.
+#
+# NetworkPolicy в Kubernetes работает только на разрешение — запрещающих правил
+# в ней нет. Пока под не выбран ни одной политикой, он открыт для всех.
+# Изоляция появляется в момент, когда под попадает под действие хотя бы одной
+# политики: с этого момента разрешено только то, что прямо перечислено.
+#
+# Поэтому сначала все поды пространства имён закрываются полностью, а дальше
+# разрешения выдаются точечно в non-admin-api-allow.yaml и admin-api-allow.yaml.
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: traffic-demo
+  annotations:
+    description: "Запрещает весь входящий и исходящий трафик для всех подов пространства имён"
+spec:
+  # Пустой podSelector означает «все поды пространства имён».
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  # Правил нет намеренно: пустой список разрешений = полный запрет.
+---
+# Разрешение резолва DNS.
+#
+# Как только на под действует политика с Egress, закрывается и обращение к
+# CoreDNS. Без этого исключения обращение по имени сервиса падает не по
+# сетевой политике, а на разрешении имени, и проверка изоляции показывает
+# «bad address» вместо реального поведения сети.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: traffic-demo
+  annotations:
+    description: "Разрешает всем подам обращаться к CoreDNS: только UDP и TCP 53 в kube-system"
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
