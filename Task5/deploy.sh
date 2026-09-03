@@ -10,7 +10,12 @@
 # =============================================================================
 set -euo pipefail
 
-NS="${NS:-traffic-demo}"
+# Пространство имён зафиксировано, а не вынесено в переменную окружения:
+# manifests пиннят namespace в metadata, чтобы файл политики можно было
+# применить и напрямую (kubectl apply -f non-admin-api-allow.yaml), как это
+# описано в задании. Переопределяемая переменная и жёсткий namespace в
+# манифесте рассинхронизировались бы, поэтому источник истины один — манифест.
+NS="traffic-demo"
 IMAGE="${IMAGE:-nginx:alpine}"   # вариант nginx на alpine: содержит wget для проверок
 
 log() { printf '\033[0;36m==>\033[0m %s\n' "$*"; }
@@ -52,7 +57,10 @@ for entry in "${SERVICES[@]}"; do
   if kubectl get pod "$name" -n "$NS" >/dev/null 2>&1; then
     printf '    %-26s метка role=%-20s уже развёрнут\n' "$name" "$role"
   else
-    kubectl run "$name" --image="$IMAGE" --labels "role=$role" --expose --port 80 -n "$NS" >/dev/null
+    # --restart=Never задан явно: kubectl создаёт именно под, а не Deployment,
+    # и имя пода совпадает с $name — на это опираются kubectl wait и verify.sh.
+    kubectl run "$name" --image="$IMAGE" --labels "role=$role" \
+      --restart=Never --expose --port 80 -n "$NS" >/dev/null
     printf '    %-26s метка role=%-20s создан\n' "$name" "$role"
   fi
 done
@@ -70,7 +78,9 @@ echo
 log "Применяю сетевые политики"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 for f in 00-default-deny.yaml non-admin-api-allow.yaml admin-api-allow.yaml; do
-  kubectl apply -f "$DIR/$f" -n "$NS" >/dev/null
+  # namespace берётся из самого манифеста; ключ -n не передаётся намеренно,
+  # чтобы не было двух источников истины.
+  kubectl apply -f "$DIR/$f" >/dev/null
   printf '    %s\n' "$f"
 done
 echo
