@@ -17,6 +17,7 @@ set -euo pipefail
 # манифесте рассинхронизировались бы, поэтому источник истины один — манифест.
 NS="traffic-demo"
 IMAGE="${IMAGE:-nginx:alpine}"   # вариант nginx на alpine: содержит wget для проверок
+PORT=80                          # порт сервиса и контейнера; сверяется при повторном запуске
 
 log() { printf '\033[0;36m==>\033[0m %s\n' "$*"; }
 die() { printf '\033[0;31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
@@ -60,14 +61,21 @@ drift_reason() { # <имя> <роль> -> причина пересоздани�
   local name="$1" role="$2"
   kubectl get pod "$name" -n "$NS" >/dev/null 2>&1 || { echo "пода нет"; return; }
   kubectl get service "$name" -n "$NS" >/dev/null 2>&1 || { echo "нет сервиса"; return; }
-  local cur_role cur_image cur_phase cur_selector
+  local cur_role cur_image cur_phase cur_selector cur_port cur_target
   cur_role="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.metadata.labels.role}' 2>/dev/null || true)"
   cur_image="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.spec.containers[0].image}' 2>/dev/null || true)"
   cur_phase="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.status.phase}' 2>/dev/null || true)"
   cur_selector="$(kubectl get service "$name" -n "$NS" -o jsonpath='{.spec.selector.role}' 2>/dev/null || true)"
+  # Порт и целевой порт сверяются наравне с селектором: сервис с верным
+  # селектором, но изменённым портом выглядит исправным, а все проверки
+  # связности при этом падают — и выглядит это как работа сетевой политики.
+  cur_port="$(kubectl get service "$name" -n "$NS" -o jsonpath='{.spec.ports[0].port}' 2>/dev/null || true)"
+  cur_target="$(kubectl get service "$name" -n "$NS" -o jsonpath='{.spec.ports[0].targetPort}' 2>/dev/null || true)"
   [[ "$cur_role"     == "$role"  ]] || { echo "метка role=$cur_role вместо $role"; return; }
   [[ "$cur_image"    == "$IMAGE" ]] || { echo "образ $cur_image вместо $IMAGE"; return; }
   [[ "$cur_selector" == "$role"  ]] || { echo "селектор сервиса role=$cur_selector вместо $role"; return; }
+  [[ "$cur_port"     == "$PORT"  ]] || { echo "порт сервиса $cur_port вместо $PORT"; return; }
+  [[ "$cur_target"   == "$PORT"  ]] || { echo "целевой порт сервиса $cur_target вместо $PORT"; return; }
   case "$cur_phase" in Running|Pending) ;; *) echo "под в состоянии $cur_phase" ;; esac
 }
 
@@ -91,7 +99,7 @@ for entry in "${SERVICES[@]}"; do
   # --restart=Never задан явно: kubectl создаёт именно под, а не Deployment,
   # и имя пода совпадает с $name — на это опираются kubectl wait и verify.sh.
   kubectl run "$name" --image="$IMAGE" --labels "role=$role" \
-    --restart=Never --expose --port 80 -n "$NS" >/dev/null
+    --restart=Never --expose --port "$PORT" -n "$NS" >/dev/null
 done
 
 log "Жду готовности подов"

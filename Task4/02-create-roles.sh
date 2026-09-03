@@ -137,9 +137,14 @@ rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Вебхуки допуска намеренно НЕ входят в эту роль: право создать
+  # mutatingwebhookconfiguration равносильно полному контролю над кластером —
+  # вебхук внедряет контейнеры и монтирует секреты в поды всех пространств
+  # имён, обходя ограничение «рабочие нагрузки только на чтение».
+  # Вынесено в отдельную привилегированную роль cluster-admission-admin.
   - apiGroups: ["admissionregistration.k8s.io"]
     resources: ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+    verbs: ["get", "list", "watch"]
   # Рабочие нагрузки — только чтение: настройка платформы не означает права
   # изменять приложения продуктовых команд.
   - apiGroups: [""]
@@ -164,6 +169,21 @@ rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Права create/update на привязки самих по себе недостаточно. Kubernetes
+  # разрешает создать привязку, только если создатель уже обладает всеми
+  # правами выдаваемой роли, либо имеет на неё глагол bind. Без bind роль ИБ
+  # не смогла бы выдать НИ ОДНУ роль этой модели — включая cluster-viewer.
+  # Список ролей перечислен поимённо: bind выдан ровно на роли модели и не
+  # распространяется на встроенную cluster-admin, поэтому сделать кого-либо
+  # администратором кластера обладатель этой роли не может.
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles"]
+    verbs: ["bind"]
+    resourceNames: ["cluster-viewer", "cluster-configurator", "secret-reader", "pod-debugger"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles"]
+    verbs: ["bind"]
+    resourceNames: ["namespace-developer"]
   - apiGroups: ["networking.k8s.io"]
     resources: ["networkpolicies"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
@@ -179,6 +199,23 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments", "statefulsets", "daemonsets"]
     verbs: ["get", "list", "watch"]
+---
+# --- ПРИВИЛЕГИРОВАННАЯ: настройка вебхуков допуска.
+# --- Равносильна полному контролю над кластером: вебхук может внедрить
+# --- контейнер или примонтировать секрет в любой создаваемый под. Поэтому
+# --- группам не выдаётся, привязка создаётся персонально и на время работ.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-admission-admin
+  labels: { rbac-tier: "privileged" }
+  annotations:
+    description: "ПРИВИЛЕГИРОВАННАЯ РОЛЬ. Настройка вебхуков допуска. По последствиям равна cluster-admin"
+rules:
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["validatingwebhookconfigurations", "mutatingwebhookconfigurations",
+                "validatingadmissionpolicies", "validatingadmissionpolicybindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 # --- ПРИВИЛЕГИРОВАННАЯ: чтение секретов. Выдаётся только через RoleBinding
 # --- в конкретном пространстве имён, кластерной привязки не имеет. ---
@@ -212,6 +249,7 @@ rules:
     verbs: ["get", "list", "watch"]
 EOF
 printf '    %s\n' "cluster-viewer" "cluster-configurator" "cluster-security-admin" \
+                  "cluster-admission-admin (привилегированная, группам не выдаётся)" \
                   "secret-reader (привилегированная)" "pod-debugger (привилегированная)"
 echo
 

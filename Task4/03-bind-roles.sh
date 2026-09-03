@@ -230,10 +230,50 @@ check no  dev-sales      create pods -n sales --subresource=exec
 check yes dev-smart-access create deployments -n smart-access
 check no  dev-smart-access create deployments -n sales
 
+echo "  Настройка допуска (вебхуки = полный контроль над кластером):"
+check no  platform-ops   create mutatingwebhookconfigurations
+check no  platform-ops   create validatingwebhookconfigurations
+check no  security       create mutatingwebhookconfigurations
+
 echo "  Привилегированные действия:"
 check yes sre-oncall     get    secrets    -n platform
 check yes sre-oncall     create pods -n finance --subresource=exec
 check no  sre-oncall     create namespaces
+
+
+# Выдачу прав нельзя проверить через auth can-i: запрет на повышение привилегий
+# срабатывает не на авторизации, а при записи объекта. Поэтому здесь делается
+# настоящая попытка создать привязку с --dry-run=server от имени группы.
+try_apply() { # <ожидание ok|forbidden> <группа> <описание> <манифест>
+  local expect="$1" group="$2" what="$3" manifest="$4" got
+  if printf '%s' "$manifest" | kubectl apply --dry-run=server --as=rbac-probe --as-group="$group" -f - >/dev/null 2>&1; then
+    got=ok
+  else
+    got=forbidden
+  fi
+  if [[ "$got" == "$expect" ]]; then
+    printf '    \033[0;32m OK \033[0m %-16s %-46s -> %s\n' "$group" "$what" "$got"
+  else
+    printf '    \033[0;31mОШИБКА\033[0m %-16s %-46s -> %s (ожидалось %s)\n' "$group" "$what" "$got" "$expect"
+    FAILED=1
+  fi
+}
+
+echo "  Выдача прав информационной безопасностью:"
+try_apply ok security "выдать secret-reader дежурной смене" '''apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: rbac-probe-grant, namespace: sales }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: secret-reader }
+subjects: [{ kind: Group, name: sre-oncall, apiGroup: rbac.authorization.k8s.io }]'''
+try_apply forbidden security "сделать кого-либо cluster-admin" '''apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: { name: rbac-probe-admin }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: cluster-admin }
+subjects: [{ kind: Group, name: security, apiGroup: rbac.authorization.k8s.io }]'''
+try_apply forbidden security "создать роль с доступом к секретам" '''apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: { name: rbac-probe-role, namespace: sales }
+rules: [{ apiGroups: [""], resources: ["secrets"], verbs: ["get"] }]'''
 
 echo
 if [[ "$FAILED" -eq 0 ]]; then

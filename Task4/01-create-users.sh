@@ -66,6 +66,35 @@ log "Контекст kubectl: $CURRENT_CONTEXT"
 [[ -f "$CA_CRT" ]] || die "не найден сертификат CA кластера: $CA_CRT"
 [[ -f "$CA_KEY" ]] || die "не найден ключ CA кластера: $CA_KEY"
 
+# --- Сверка удостоверяющего центра с целевым кластером -----------------------
+# Ключ EXPECTED_CONTEXT позволяет указать другой контекст, но адрес API-сервера
+# берётся из него, а подпись всегда делается ключом из каталога minikube. Если
+# у выбранного кластера другой УЦ, скрипт молча выпустит kubeconfig, которые
+# этот кластер отвергнет при первом же обращении. Поэтому отпечаток УЦ, которым
+# подписываем, сверяется с УЦ текущего контекста.
+ca_fingerprint() { openssl x509 -in "$1" -noout -fingerprint -sha256 2>/dev/null | cut -d= -f2; }
+
+CTX_CA_FILE="$(kubectl config view --raw --minify -o jsonpath='{.clusters[0].cluster.certificate-authority}' 2>/dev/null || true)"
+CTX_CA_DATA="$(kubectl config view --raw --minify -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' 2>/dev/null || true)"
+TMP_CA=""
+if [[ -n "$CTX_CA_FILE" ]]; then
+  CTX_CA_PATH="$CTX_CA_FILE"
+elif [[ -n "$CTX_CA_DATA" ]]; then
+  TMP_CA="$(mktemp)"; trap 'rm -f "$TMP_CA"' EXIT
+  printf '%s' "$CTX_CA_DATA" | openssl base64 -d -A > "$TMP_CA"
+  CTX_CA_PATH="$TMP_CA"
+else
+  die "в контексте '$CURRENT_CONTEXT' не указан удостоверяющий центр кластера — сверить подпись не с чем"
+fi
+
+if [[ "$(ca_fingerprint "$CA_CRT")" != "$(ca_fingerprint "$CTX_CA_PATH")" ]]; then
+  die "удостоверяющий центр контекста '$CURRENT_CONTEXT' не совпадает с $CA_CRT.
+      Сертификаты подписываются ключом minikube и этим кластером приняты не будут.
+      Подписываем УЦ: $(ca_fingerprint "$CA_CRT")
+      УЦ кластера:    $(ca_fingerprint "$CTX_CA_PATH")
+      Укажите каталог нужного кластера через MINIKUBE_HOME либо запускайте на minikube."
+fi
+
 API_SERVER="$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')"
 [[ -n "$API_SERVER" ]] || die "не удалось определить адрес API-сервера"
 
