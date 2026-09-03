@@ -230,6 +230,12 @@ check no  dev-sales      create pods -n sales --subresource=exec
 check yes dev-smart-access create deployments -n smart-access
 check no  dev-smart-access create deployments -n sales
 
+echo "  Выпуск удостоверений (одобрение CSR = выпуск любой личности):"
+check no  security       approve signers.certificates.k8s.io
+check no  security       update certificatesigningrequests/approval
+check no  security       create certificatesigningrequests
+check yes security       list   certificatesigningrequests
+
 echo "  Настройка допуска (вебхуки = полный контроль над кластером):"
 check no  platform-ops   create mutatingwebhookconfigurations
 check no  platform-ops   create validatingwebhookconfigurations
@@ -270,6 +276,12 @@ kind: ClusterRoleBinding
 metadata: { name: rbac-probe-admin }
 roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: cluster-admin }
 subjects: [{ kind: Group, name: security, apiGroup: rbac.authorization.k8s.io }]'''
+try_apply forbidden security "выпустить удостоверение группы sre-oncall" "$(
+  key=$(mktemp); csr=$(mktemp)
+  openssl req -new -newkey rsa:2048 -nodes -keyout "$key" -subj "/CN=rbac-probe-escalate/O=sre-oncall" -out "$csr" 2>/dev/null
+  printf 'apiVersion: certificates.k8s.io/v1\nkind: CertificateSigningRequest\nmetadata: { name: rbac-probe-csr }\nspec:\n  request: %s\n  signerName: kubernetes.io/kube-apiserver-client\n  usages: ["client auth"]\n' "$(openssl base64 -A -in "$csr")"
+  rm -f "$key" "$csr"
+)"
 try_apply forbidden security "создать роль с доступом к секретам" '''apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata: { name: rbac-probe-role, namespace: sales }

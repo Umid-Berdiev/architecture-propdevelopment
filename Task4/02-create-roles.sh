@@ -187,12 +187,24 @@ rules:
   - apiGroups: ["networking.k8s.io"]
     resources: ["networkpolicies"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Запросы на подпись — ТОЛЬКО чтение, для разбора и аудита.
+  #
+  # Право одобрять запросы встроенному подписывателю kube-apiserver-client
+  # равносильно праву выпустить удостоверение любой личности и любой группы,
+  # то есть обходит всю ролевую модель: обладатель роли выпускает себе
+  # сертификат с группой sre-oncall и читает секреты, которых у него нет.
+  # Проверено на кластере — эскалация воспроизводится полностью.
+  #
+  # Группу system:masters API-сервер для этого подписывателя отклоняет сам,
+  # но на остальные группы запрета нет, поэтому ограничиться этим нельзя.
+  #
+  # Одобрение запросов должно принадлежать отдельной роли, либо подписывателю,
+  # который проверяет допустимые субъекты. В этой модели выпуск удостоверений
+  # выполняется вне кластера (01-create-users.sh), и роли ИБ право одобрения
+  # не требуется вовсе.
   - apiGroups: ["certificates.k8s.io"]
-    resources: ["certificatesigningrequests", "certificatesigningrequests/approval", "certificatesigningrequests/status"]
-    verbs: ["get", "list", "watch", "create", "update", "delete"]
-  - apiGroups: ["certificates.k8s.io"]
-    resources: ["signers"]
-    verbs: ["approve"]
+    resources: ["certificatesigningrequests"]
+    verbs: ["get", "list", "watch"]
   - apiGroups: [""]
     resources: ["namespaces", "serviceaccounts", "events", "pods", "services", "configmaps", "nodes"]
     verbs: ["get", "list", "watch"]
