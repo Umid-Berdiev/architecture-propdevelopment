@@ -25,6 +25,22 @@ die()  { printf '\033[0;31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
 command -v kubectl >/dev/null 2>&1 || die "kubectl не найден в PATH"
 kubectl cluster-info >/dev/null 2>&1 || die "кластер недоступен. Запустите: minikube start"
 
+# --- Защита от запуска в чужом кластере -------------------------------------
+# Рядом с minikube обычно настроен рабочий кластер. Скрипт создаёт учётные
+# данные и права доступа, поэтому запуск не в том контексте недопустим.
+# Проверка выполняется ДО чтения любых данных кластера: иначе адрес API-сервера
+# был бы взят из текущего контекста, а сертификат УЦ — из каталога minikube,
+# и на выходе получились бы нерабочие файлы доступа.
+# Проверка снимается явно: EXPECTED_CONTEXT=<имя> ./<скрипт>
+EXPECTED_CONTEXT="${EXPECTED_CONTEXT:-minikube}"
+CURRENT_CONTEXT="$(kubectl config current-context 2>/dev/null || true)"
+if [[ "$CURRENT_CONTEXT" != "$EXPECTED_CONTEXT" ]]; then
+  die "текущий контекст kubectl — '${CURRENT_CONTEXT:-не задан}', ожидался '$EXPECTED_CONTEXT'.
+      Переключитесь:     kubectl config use-context $EXPECTED_CONTEXT
+      Либо укажите явно: EXPECTED_CONTEXT=${CURRENT_CONTEXT:-<имя>} $0"
+fi
+log "Контекст kubectl: $CURRENT_CONTEXT"
+
 # Пространства имён = домены компании. Метка data-classification берётся из
 # классификации данных, выполненной в Задании 1.
 NAMESPACES=(

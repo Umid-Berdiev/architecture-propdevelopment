@@ -51,18 +51,47 @@ SERVICES=(
   "admin-back-end-api-app|admin-back-end-api"
 )
 
+# Проверяется не факт существования пода, а совпадение с желаемым состоянием.
+# Наличие пода с нужным именем ещё ничего не гарантирует: сервис мог быть
+# удалён, метка role изменена вручную, образ подменён, под завершиться. В любом
+# из этих случаев повторный запуск обязан привести кластер в нужное состояние,
+# а не отчитаться «уже развёрнут» поверх расхождения.
+drift_reason() { # <имя> <роль> -> причина пересоздания или пусто
+  local name="$1" role="$2"
+  kubectl get pod "$name" -n "$NS" >/dev/null 2>&1 || { echo "пода нет"; return; }
+  kubectl get service "$name" -n "$NS" >/dev/null 2>&1 || { echo "нет сервиса"; return; }
+  local cur_role cur_image cur_phase cur_selector
+  cur_role="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.metadata.labels.role}' 2>/dev/null || true)"
+  cur_image="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.spec.containers[0].image}' 2>/dev/null || true)"
+  cur_phase="$(kubectl get pod "$name" -n "$NS" -o jsonpath='{.status.phase}' 2>/dev/null || true)"
+  cur_selector="$(kubectl get service "$name" -n "$NS" -o jsonpath='{.spec.selector.role}' 2>/dev/null || true)"
+  [[ "$cur_role"     == "$role"  ]] || { echo "метка role=$cur_role вместо $role"; return; }
+  [[ "$cur_image"    == "$IMAGE" ]] || { echo "образ $cur_image вместо $IMAGE"; return; }
+  [[ "$cur_selector" == "$role"  ]] || { echo "селектор сервиса role=$cur_selector вместо $role"; return; }
+  case "$cur_phase" in Running|Pending) ;; *) echo "под в состоянии $cur_phase" ;; esac
+}
+
 log "Разворачиваю сервисы (образ $IMAGE)"
 for entry in "${SERVICES[@]}"; do
   IFS='|' read -r name role <<< "$entry"
-  if kubectl get pod "$name" -n "$NS" >/dev/null 2>&1; then
-    printf '    %-26s метка role=%-20s уже развёрнут\n' "$name" "$role"
-  else
-    # --restart=Never задан явно: kubectl создаёт именно под, а не Deployment,
-    # и имя пода совпадает с $name — на это опираются kubectl wait и verify.sh.
-    kubectl run "$name" --image="$IMAGE" --labels "role=$role" \
-      --restart=Never --expose --port 80 -n "$NS" >/dev/null
-    printf '    %-26s метка role=%-20s создан\n' "$name" "$role"
+  reason="$(drift_reason "$name" "$role")"
+  if [[ -z "$reason" ]]; then
+    printf '    %-26s метка role=%-20s соответствует желаемому состоянию\n' "$name" "$role"
+    continue
   fi
+  # Под и сервис пересоздаются парой: kubectl run --expose создаёт их вместе,
+  # и чинить их по отдельности означало бы разойтись с этим способом создания.
+  if kubectl get pod "$name" -n "$NS" >/dev/null 2>&1 || kubectl get service "$name" -n "$NS" >/dev/null 2>&1; then
+    kubectl delete pod "$name" -n "$NS" --ignore-not-found --wait=true >/dev/null 2>&1
+    kubectl delete service "$name" -n "$NS" --ignore-not-found --wait=true >/dev/null 2>&1
+    printf '    %-26s метка role=%-20s пересоздаю (%s)\n' "$name" "$role" "$reason"
+  else
+    printf '    %-26s метка role=%-20s создаю\n' "$name" "$role"
+  fi
+  # --restart=Never задан явно: kubectl создаёт именно под, а не Deployment,
+  # и имя пода совпадает с $name — на это опираются kubectl wait и verify.sh.
+  kubectl run "$name" --image="$IMAGE" --labels "role=$role" \
+    --restart=Never --expose --port 80 -n "$NS" >/dev/null
 done
 
 log "Жду готовности подов"
